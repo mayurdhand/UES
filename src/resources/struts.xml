@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.action.extension" value="action" />
+	<constant name="struts.configuration.xml.reload" value="true"/>
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.enable.SlashesInActionNames" value="true" />
+	<constant name="struts.multipart.maxSize" value="1000000000" />
+	<constant name="struts.url.includeParams" value="none" />
+
+	<include file="struts-transaction-default.xml"></include>
+
+	<package name="authentication" extends="transaction-default">
+		<interceptors>
+			<interceptor name="ValidationInterceptor"	class="com.db.riskit.interceptors.ValidationInterceptor" />
+		</interceptors>
+
+		<global-results>
+			<result name="authfailed" type="redirect">/authfailed.jsp</result>
+		</global-results>
+		
+		<action name="admin/CCAction" class="com.db.riskit.actions.admin.CCAction">
+			<interceptor-ref name="ValidationInterceptor" />
+			<interceptor-ref name="defaultStack" />
+			<result name="cc" type="json"/>
+		</action>
+		
+		<action name="cc/CCAction" class="com.db.riskit.actions.noauth.CCAction">
+			<interceptor-ref name="ValidationInterceptor" />
+			<interceptor-ref name="defaultStack" />
+			<result name="cc" type="json"/>
+		</action>
+		
+		<action name="admin/BookConfigAction" class="com.db.riskit.actions.admin.BookConfigAction">
+			<interceptor-ref name="ValidationInterceptor" />
+			<interceptor-ref name="defaultStack" />
+			<result name="showPendingRequests" type="json"/>
+			<result name="scheduler" type="json"/>
+			<result name="allotConfig" type="json"/>
+			<result name="editBooking" type="json"/>			
+		</action>
+		
+		<action name="admin/BookRSAction" class="com.db.riskit.actions.admin.BookRSAction">
+			<interceptor-ref name="ValidationInterceptor" />
+			<interceptor-ref name="defaultStack" />
+			<result name="showPendingDecom" type="json"/>
+			<result name="showPendingRequests" type="json"/>
+			<result name="scheduler" type="json"/>
+		</action>
+		
+		<action name="admin/FileUploadAction" class="com.db.riskit.actions.admin.FileUploadAction">
+			<interceptor-ref name="ValidationInterceptor" />
+			<interceptor-ref name="defaultStack" />
+			<result name="uploadstatus" type="json">	
+				<param name="contentType">text/html</param>
+			</result>
+			<result name="downloadFile" type="stream">
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename="${filename}"</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		
+		<action name="admin/ContactsAction" class="com.db.riskit.actions.admin.ContactsAction">
+			<interceptor-ref name="ValidationInterceptor" />
+			<interceptor-ref name="defaultStack" />
+			<result name="contacts" type="json"/>
+		</action>
+		
+		<action name="admin/LinksAction" class="com.db.riskit.actions.admin.LinksAction">
+			<interceptor-ref name="ValidationInterceptor" />
+			<interceptor-ref name="defaultStack" />			
+			<result name="links" type="json"/>
+		</action>		
+
+		<action name="contacts/ContactsAction" class="com.db.riskit.actions.noauth.ContactsAction">
+			<interceptor-ref name="ValidationInterceptor" />
+			<interceptor-ref name="defaultStack" />			
+			<result name="contacts" type="json"/>
+		</action>	
+
+		<action name="links/LinksAction" class="com.db.riskit.actions.noauth.LinksAction">
+			<interceptor-ref name="ValidationInterceptor" />
+			<interceptor-ref name="defaultStack" />			
+			<result name="links" type="json"/>
+		</action>
+
+		<action name="BookConfigAction" class="com.db.riskit.actions.noauth.BookConfigAction">
+			<interceptor-ref name="ValidationInterceptor" />
+			<interceptor-ref name="defaultStack" />
+			<result name="noauthbca" type="json"/>
+			<result name="downloadFile" type="stream">
+				<param name="contentDisposition">attachment;filename=ConfigBooking.csv</param>
+				<param name="contentType">application/vnd.ms-excel</param>
+				<param name="inputName">inputStream</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+	
+		<action name="BookRSAction" class="com.db.riskit.actions.noauth.BookRSAction">
+			<interceptor-ref name="ValidationInterceptor" />
+			<interceptor-ref name="defaultStack" />
+			<result name="noauthbca" type="json"/>
+			<result name="downloadFile" type="stream">
+				<param name="contentDisposition">attachment;filename=RSBooking.csv</param>
+				<param name="contentType">application/vnd.ms-excel</param>
+				<param name="inputName">inputStream</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+		<action name="InventoryAction" class="com.db.riskit.actions.noauth.InventoryAction">
+			<interceptor-ref name="ValidationInterceptor" />
+			<interceptor-ref name="defaultStack" />
+			<result name="viewInventory" type="json"/>
+			<result name="downloadFile" type="stream">
+				<param name="contentDisposition">attachment;filename=Inventory.csv</param>
+				<param name="contentType">application/vnd.ms-excel</param>
+				<param name="inputName">inputStream</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		
+		<action name="TicketAction" class="com.db.riskit.actions.noauth.TicketAction">
+			<interceptor-ref name="ValidationInterceptor" />
+			<interceptor-ref name="defaultStack" />
+			<result name="execute" type="json"/>
+		</action>
+
+	</package>
+</struts>
